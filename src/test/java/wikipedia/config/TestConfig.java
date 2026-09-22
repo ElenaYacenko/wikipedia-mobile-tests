@@ -7,6 +7,7 @@ import org.aeonbits.owner.Config;
         "system:properties",
         "system:env",
         "classpath:config/${env}.properties",
+        "classpath:config/secret.properties",
         "classpath:config/default.properties"
 })
 public interface TestConfig extends Config {

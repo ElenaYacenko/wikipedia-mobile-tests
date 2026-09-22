@@ -8,13 +8,14 @@ repositories {
 }
 
 def aspectjWeaverVersion = "1.9.25",
-    allureVersion = "2.29.1",
-    junitVersion = "5.11.3",
-    selenideVersion = "6.13.0",
+    selenideVersion = "7.5.0",
     restAssuredVersion = "5.3.0",
+    allureVersion = "2.21.0",
+    junitVersion = "5.9.3",
+    slf4jVersion = "2.0.7",
     appiumVersion = "9.3.0",
     seleniumVersion = "4.25.0",
-    slf4jVersion = "2.0.16"
+    selenideAppiumVersion = "7.5.0"
 
 allure {
     report {
@@ -33,26 +34,35 @@ allure {
 dependencies {
     testImplementation(
             "org.aspectj:aspectjweaver:$aspectjWeaverVersion",
-            "com.codeborne:selenide:$selenideVersion",
-            "org.seleniumhq.selenium:selenium-java:$seleniumVersion",
+            //"com.codeborne:selenide:$selenideVersion",
             "io.qameta.allure:allure-selenide:$allureVersion",
+            "io.qameta.allure:allure-junit5:$allureVersion",
             "io.appium:java-client:$appiumVersion",
             "io.rest-assured:rest-assured:$restAssuredVersion",
+            "org.seleniumhq.selenium:selenium-java:$seleniumVersion",
             "org.junit.jupiter:junit-jupiter:$junitVersion",
             "org.slf4j:slf4j-simple:$slf4jVersion",
-            "org.aeonbits.owner:owner:1.0.12"
+            "org.aeonbits.owner:owner:1.0.12",
+            "com.codeborne:selenide-appium:$selenideAppiumVersion"
     )
+    testImplementation("com.codeborne:selenide:$selenideVersion") {
+        exclude group: 'org.seleniumhq.selenium'
+    }
+    testImplementation("com.codeborne:selenide-appium:$selenideAppiumVersion") {
+        exclude group: 'org.seleniumhq.selenium'
+    }
+
+    // Явно указываем Selenium нужной версии
+    testImplementation "org.seleniumhq.selenium:selenium-java:$seleniumVersion"
 }
 
 tasks.withType(Test) {
     useJUnitPlatform()
 
     systemProperty "file.encoding", "UTF-8"
-
-    systemProperty("deviceHost", System.getProperty("deviceHost", "emulation"))
+    systemProperty "deviceHost", System.getProperty("deviceHost", "emulation")
     systemProperty "browserstack.user", System.getProperty("browserstack.user")
     systemProperty "browserstack.key", System.getProperty("browserstack.key")
-
 
     testLogging {
         lifecycle {
@@ -60,10 +70,10 @@ tasks.withType(Test) {
             exceptionFormat "short"
         }
     }
+}
 
-    java {
-        toolchain {
-            languageVersion.set(JavaLanguageVersion.of(21))
-        }
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
