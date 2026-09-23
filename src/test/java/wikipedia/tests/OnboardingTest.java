@@ -2,15 +2,16 @@ package wikipedia.tests;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import wikipedia.pages.OnboardingScreen;
+
+import static io.qameta.allure.Allure.step;
 
 @DisplayName("Онбординг Wikipedia")
-public class OnboardingTest extends TestBase{
-    private final OnboardingScreen onboarding = new OnboardingScreen();
+public class OnboardingTest extends TestBase {
 
     @Test
     @DisplayName("Прохождение 4 экранов онбординга с проверками")
     public void onboardingTest() {
+        step("Пройти онбординг", () -> {
         onboarding
                 .checkKnowledgeScreen()
                 .clickForward()
@@ -19,7 +20,11 @@ public class OnboardingTest extends TestBase{
                 .checkLanguagesScreen()
                 .clickForward()
                 .checkCuriosityScreen()
-                .clickSkip()
-                .checkMainScreenOpened();
+                .clickSkip();
+        });
+        step("Проверить что открылся главный экран", () -> {
+        mainScreen
+                .checkOpened();
+        });
     }
 }
