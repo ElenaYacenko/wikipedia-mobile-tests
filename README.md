@@ -73,17 +73,18 @@ git clone https://github.com/ElenaYacenko/wikipedia-mobile-tests.git
 cd wikipedia-mobile-tests
 ```
 
-### 2. Скачай APK Wikipedia
+### 2. APK скачается автоматически
 
-Перейди на [страницу релизов](https://github.com/wikimedia/apps-android-wikipedia/releases) и скачай последний **alpha** APK.
+Скачивать APK вручную **не нужно** — он загрузится при первом запуске тестов.
 
-Положи файл сюда:
+Как это работает:
+- При старте тестов код проверяет `src/test/resources/apps/`
+- Если APK нет — он скачивается с [GitHub Releases](https://github.com/wikimedia/apps-android-wikipedia/releases)
+- Файл сохраняется локально и используется при следующих запусках
 
-```
-src/test/resources/apps/wikipedia.apk
-```
-
-> ⚠️ APK **не коммитится** в Git (он в `.gitignore`). Каждый разработчик скачивает его локально.
+> ⚙️ URL и имя файла настраиваются через `local.app.name` и `local.app.baseUrl` в `default.properties`.
+>
+> ⚠️ APK **не коммитится** в Git (он в `.gitignore`).
 
 ### 3. Установи зависимости
 

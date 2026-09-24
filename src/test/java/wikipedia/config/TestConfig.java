@@ -65,7 +65,11 @@ public interface TestConfig extends Config {
     String androidApp();
 
     // ===== Local APK =====
-    @Key("local.app")
-    @DefaultValue("src/test/resources/apps/wikipedia.apk")
-    String localApp();
+    @Key("local.app.name")
+    @DefaultValue("app-alpha-universal-release.apk")
+    String localAppName();
+
+    @Key("local.app.baseUrl")
+    @DefaultValue("https://github.com/wikimedia/apps-android-wikipedia/releases/download/latest/")
+    String localAppBaseUrl();
 }

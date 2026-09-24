@@ -1,6 +1,7 @@
 package wikipedia.drivers;
 
 import com.codeborne.selenide.WebDriverProvider;
+import org.apache.commons.io.FileUtils;
 import wikipedia.config.TestConfig;
 import io.appium.java_client.android.AndroidDriver;
 import org.aeonbits.owner.ConfigFactory;
@@ -8,8 +9,12 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -23,13 +28,6 @@ public class AndroidDriverProvider implements WebDriverProvider {
         System.setProperty("env", host);
         TestConfig config = ConfigFactory.create(
                 TestConfig.class, System.getProperties(), System.getenv());
-
-        // Отладка
-        System.out.println(">>> host  = " + host);
-        System.out.println(">>> env   = " + System.getProperty("env"));
-        System.out.println(">>> user  = " + config.browserstackUser());
-        System.out.println(">>> key   = " + config.browserstackKey());
-        System.out.println(">>> app   = " + config.androidApp());
 
         MutableCapabilities caps;
         String hub;
@@ -118,18 +116,21 @@ public class AndroidDriverProvider implements WebDriverProvider {
 
     // ===== Локальный APK =====
     private static String localApk(TestConfig config) {
-        String configured = config.localApp();
-        Path path = Path.of(configured);
-        if (!path.isAbsolute()) {
-            path = Path.of(System.getProperty("user.dir")).resolve(path);
+        String appName = config.localAppName();
+        String appUrl = config.localAppBaseUrl() + appName;
+        String appPath = "src/test/resources/apps/" + appName;
+
+        File app = new File(appPath);
+        if (!app.exists()) {
+            System.out.println("APK not found. Downloading from " + appUrl + " ...");
+            try (InputStream in = new URL(appUrl).openStream()) {
+                FileUtils.copyInputStreamToFile(in, app);
+                System.out.println("APK downloaded to " + app.getAbsolutePath());
+            } catch (IOException e) {
+                throw new AssertionError("Failed to download application", e);
+            }
         }
-        path = path.toAbsolutePath().normalize();
-        if (!Files.exists(path)) {
-            throw new IllegalStateException(
-                    "APK not found at " + path
-                            + ". Скачай Wikipedia APK и положи в src/test/resources/apps/wikipedia.apk");
-        }
-        return path.toString();
+        return app.getAbsolutePath();
     }
 
     // ===== Проверки =====
