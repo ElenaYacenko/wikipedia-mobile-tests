@@ -51,4 +51,18 @@ public class TestBase {
     private static boolean blank(String value) {
         return value == null || value.isBlank();
     }
+
+    protected void passOnboarding() {
+        onboarding
+                .checkKnowledgeScreen()
+                .clickForward()
+                .checkDataPrivacyScreen()
+                .clickForward()
+                .checkLanguagesScreen()
+                .clickForward()
+                .checkCuriosityScreen()
+                .clickSkip();
+
+        mainScreen.checkOpened();
+    }
 }

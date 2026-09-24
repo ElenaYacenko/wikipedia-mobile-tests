@@ -29,11 +29,8 @@ public class SearchScreen {
     // ===== Действия =====
     @Step("Закрываем подсказку (если появилась)")
     public SearchScreen closeTooltipIfVisible() {
-        try {
-            closeTooltipButton
-                    .shouldBe(visible, Duration.ofSeconds(2))
-                    .click();
-        } catch (Exception e) {
+        if (closeTooltipButton.exists()) {
+            closeTooltipButton.click();
         }
         return this;
     }

@@ -12,19 +12,7 @@ public class OnboardingTest extends TestBase {
     @DisplayName("Прохождение 4 экранов онбординга с проверками")
     public void onboardingTest() {
         step("Пройти онбординг", () -> {
-        onboarding
-                .checkKnowledgeScreen()
-                .clickForward()
-                .checkDataPrivacyScreen()
-                .clickForward()
-                .checkLanguagesScreen()
-                .clickForward()
-                .checkCuriosityScreen()
-                .clickSkip();
-        });
-        step("Проверить что открылся главный экран", () -> {
-        mainScreen
-                .checkOpened();
+            passOnboarding();
         });
     }
 }

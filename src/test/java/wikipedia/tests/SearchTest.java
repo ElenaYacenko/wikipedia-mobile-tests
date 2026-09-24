@@ -17,17 +17,7 @@ public class SearchTest extends TestBase {
     })
     public void searchCountryTest(String country, String description) {
         step("Пройти онбординг", () -> {
-            onboarding
-                    .checkKnowledgeScreen()
-                    .clickForward()
-                    .checkDataPrivacyScreen()
-                    .clickForward()
-                    .checkLanguagesScreen()
-                    .clickForward()
-                    .checkCuriosityScreen()
-                    .clickSkip();
-
-            mainScreen.checkOpened();
+            passOnboarding();
         });
 
         step("Открыть поиск и закрыть подсказку, если появилась", () -> {
